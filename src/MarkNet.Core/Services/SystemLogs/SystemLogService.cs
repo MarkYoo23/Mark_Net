@@ -9,16 +9,14 @@ namespace MarkNet.Core.Services.SystemLogs
     {
         private readonly ISystemLogRepository<T> _repository;
         private readonly IUnitOfWork _unitOfWork;
-        private readonly LogMapper _mapper;
+        private readonly LogMapper _mapper = new LogMapper();
 
         public SystemLogService(
             ISystemLogRepository<T> repository,
-            IUnitOfWork unitOfWork,
-            LogMapper mapper)
+            IUnitOfWork unitOfWork)
         {
             _repository = repository;
             _unitOfWork = unitOfWork;
-            _mapper = mapper;
         }
 
         public async Task<bool> PutAsync(T entity) 
@@ -36,7 +34,7 @@ namespace MarkNet.Core.Services.SystemLogs
             return response;
         }
 
-        public async Task<IEnumerable<T>> GetRangeAsync(DatePagedParameter parameter)
+        public async Task<IEnumerable<T>> GetRangeAsync(DateRangedParameter parameter)
         {
             var records = await _repository.GetLogsAsync(parameter);
             return records;
