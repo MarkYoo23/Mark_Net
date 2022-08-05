@@ -5,7 +5,6 @@ namespace MarkNet.Core.Models
     public abstract class PropertyModel<T> where T : class
     {
 #pragma warning disable CS8604
-
         public T Clone()
         {
             return (T)MemberwiseClone();
@@ -19,6 +18,11 @@ namespace MarkNet.Core.Models
         public void PatchValues(T source)
         {
             PropertyValuePatcher<T, T>.PatchValues(source, this as T);
+        }
+
+        public void ClearValues() 
+        {
+            PropertyValueClearer<T>.Clear(this as T);
         }
 #pragma warning restore CS8604
     }
