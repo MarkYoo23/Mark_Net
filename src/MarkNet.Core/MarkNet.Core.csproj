@@ -4,9 +4,13 @@
 		<TargetFramework>net6.0</TargetFramework>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
-		<Version>1.1.4</Version>
+		<Version>1.1.5</Version>
 		<PackageProjectUrl>https://github.com/rd-dhyoo/Base_Net</PackageProjectUrl>
 		<RepositoryUrl>https://github.com/rd-dhyoo/Base_Net</RepositoryUrl>
 	</PropertyGroup>
+
+	<ItemGroup>
+	  <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="6.0.0" />
+	</ItemGroup>
 
 </Project>
