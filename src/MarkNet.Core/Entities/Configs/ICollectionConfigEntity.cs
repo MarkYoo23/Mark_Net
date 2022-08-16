@@ -1,8 +1,9 @@
-﻿namespace MarkNet.Core.Entities.Configs
+﻿using MarkNet.Core.Entities.Commons;
+
+namespace MarkNet.Core.Entities.Configs
 {
-    public interface ICollectionConfigEntity
+    public interface ICollectionConfigEntity : IEntity
     {
-        public int Id { get; set; }
         public int Number { get; set; }
     }
 }
