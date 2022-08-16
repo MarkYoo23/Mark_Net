@@ -47,5 +47,11 @@ namespace MarkNet.Infrastructure.Repositories.Commons
         {
             _entities.RemoveRange(entity);
         }
+
+        public string GetName()
+        {
+            var name = typeof(T).FullName!;
+            return name;
+        }
     }
 }

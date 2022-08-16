@@ -2,41 +2,46 @@
 using MarkNet.Core.Models.SystemLogs;
 using MarkNet.Core.Repositories.Commons;
 using MarkNet.Core.Repositories.SystemLogs;
+using Microsoft.EntityFrameworkCore;
 
 namespace MarkNet.Core.Services.SystemLogs
 {
-    public abstract class SystemLogService<T> where T : ISystemLogEntity
+    public abstract class SystemLogService<TEntity, TContext> 
+        where TEntity : ISystemLogEntity
+        where TContext : DbContext
     {
-        private readonly ISystemLogRepository<T> _repository;
-        private readonly IUnitOfWork _unitOfWork;
         private readonly LogMapper _mapper = new LogMapper();
+        private readonly IMergedRepository<TContext> _mergedRepository;
 
-        public SystemLogService(
-            ISystemLogRepository<T> repository,
-            IUnitOfWork unitOfWork)
+        public SystemLogService(IMergedRepository<TContext> mergedRepository)
         {
-            _repository = repository;
-            _unitOfWork = unitOfWork;
+            _mergedRepository = mergedRepository;
         }
 
-        public async Task<bool> PutAsync(T entity) 
+        public async Task<bool> PutAsync(TEntity entity)
         {
-            await _repository.AddAsync(entity);
-            return await _unitOfWork.SaveEntitiesAsync();
+            var repository = _mergedRepository.GetRepository<ISystemLogRepository<TEntity>>();
+
+            await repository.AddAsync(entity);
+            return await _mergedRepository.SaveEntitiesAsync();
         }
 
-        public async Task<PaginatedResponse<T>> GetPagedAsync(DatePagedParameter parameter)
+        public async Task<PaginatedResponse<TEntity>> GetPagedAsync(DatePagedParameter parameter)
         {
-            var dataCount = await _repository.GetCountAsync(parameter);
+            var repository = _mergedRepository.GetRepository<ISystemLogRepository<TEntity>>();
+
+            var dataCount = await repository.GetCountAsync(parameter);
             var pageCount = (int)Math.Ceiling(dataCount / (double)parameter.Limit);
-            var records = await _repository.GetLogsAsync(parameter);
+            var records = await repository.GetLogsAsync(parameter);
             var response = _mapper.MapLogs(records, parameter.Offset, parameter.Limit, pageCount);
             return response;
         }
 
-        public async Task<IEnumerable<T>> GetRangeAsync(DateRangedParameter parameter)
+        public async Task<IEnumerable<TEntity>> GetRangeAsync(DateRangedParameter parameter)
         {
-            var records = await _repository.GetLogsAsync(parameter);
+            var repository = _mergedRepository.GetRepository<ISystemLogRepository<TEntity>>();
+
+            var records = await repository.GetLogsAsync(parameter);
             return records;
         }
     }

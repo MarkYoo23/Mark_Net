@@ -1,8 +1,9 @@
-﻿namespace MarkNet.Core.Entities.SystemLogs
+﻿using MarkNet.Core.Entities.Commons;
+
+namespace MarkNet.Core.Entities.SystemLogs
 {
-    public interface ISystemLogEntity
+    public interface ISystemLogEntity : IEntity
     {
-        int Id { get; set; }
         DateTime Created { get; set; }
     }
 }

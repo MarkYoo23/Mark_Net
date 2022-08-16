@@ -1,6 +1,8 @@
-﻿namespace MarkNet.Core.Repositories.Configs
+﻿using MarkNet.Core.Repositories.Commons;
+
+namespace MarkNet.Core.Repositories.Configs
 {
-    public interface ICollectionConfigRepository<T>
+    public interface ICollectionConfigRepository<T> : IRepository
     {
         Task<IEnumerable<T>> GetAllAsync();
         Task<IEnumerable<T>> AddRangeAsync(IEnumerable<T> configs);

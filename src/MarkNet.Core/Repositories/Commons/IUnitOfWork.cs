@@ -1,9 +1,13 @@
-﻿namespace MarkNet.Core.Repositories.Commons
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
+
+namespace MarkNet.Core.Repositories.Commons
 {
-    public interface IUnitOfWork : IDisposable
+    public interface IUnitOfWork<TContext>
+        where TContext : DbContext
     {
-        Task<int> SaveChangeAsync(CancellationToken cancellationToken = default(CancellationToken));
-        Task<bool> SaveEntitiesAsync(CancellationToken cancellationToken = default(CancellationToken));
-        int SaveChanges(CancellationToken cancellationToken = default(CancellationToken));
+        Task<IDbContextTransaction> CreateTransactionAsync();
+        Task<bool> SaveEntitiesAsync();
+        Task<int> SaveChangeAsync();
     }
 }
