@@ -2,7 +2,8 @@
 
 namespace MarkNet.Core.Repositories.Commons
 {
-    public interface IGenericRepository<T> where T : class, IEntity
+    public interface IGenericRepository<T> : IRepository
+        where T : class, IEntity
     {
         Task<IEnumerable<T>> GetAllAsync();
         Task<T> GetAsync(int id);

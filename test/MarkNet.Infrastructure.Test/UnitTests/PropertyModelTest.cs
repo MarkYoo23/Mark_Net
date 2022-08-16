@@ -1,13 +1,13 @@
-﻿using BaseNet.Core.Test.Models;
+﻿using MarkNet.Test.Models;
 
-namespace BaseNet.Core.Test
+namespace MarkNet.Test.UnitTests
 {
     public class PropertyModelTest
     {
         [Fact]
-        public void ClearValue_InputModel_ReturnNullPropertyModel() 
+        public void ClearValue_InputModel_ReturnNullPropertyModel()
         {
-            var model = new MockPropertyModel() 
+            var model = new MockPropertyModel()
             {
                 NormalInt = 1,
                 NullableInt = 1,

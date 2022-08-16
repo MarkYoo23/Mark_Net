@@ -2,33 +2,34 @@
 using MarkNet.Core.Repositories.Commons;
 using MarkNet.Core.Repositories.Configs;
 using MarkNet.Core.Services.Cashings;
+using Microsoft.EntityFrameworkCore;
 
 namespace MarkNet.Core.Services.Configs
 {
-    public abstract class CollectionConfigService<T, TEntity>
-        where T : PropertyModel<T>, new()
-        where TEntity : T, new()
+    public abstract class CollectionConfigService<TModel, TEntity, TContext>
+        where TModel : PropertyModel<TModel>, new()
+        where TEntity : TModel, new()
+        where TContext : DbContext
     {
-        private readonly CollectionCashManager<T> _cashManager;
-        private readonly ICollectionConfigRepository<TEntity> _repository;
-        private readonly IUnitOfWork _unitOfWork;
+        private readonly CollectionCashManager<TModel> _cashManager;
+        private readonly IMergedRepository<TContext> _mergedRepository;
 
         public CollectionConfigService(
-            CollectionCashManager<T> cashManager,
-            ICollectionConfigRepository<TEntity> repository,
-            IUnitOfWork unitOfWork)
+            CollectionCashManager<TModel> cashManager,
+            IMergedRepository<TContext> mergedRepository)
         {
             _cashManager = cashManager;
-            _repository = repository;
-            _unitOfWork = unitOfWork;
+            _mergedRepository = mergedRepository;
         }
 
         public async Task InitializeAsync()
         {
-            var values = (await _repository.GetAllAsync())
+            var repository = _mergedRepository.GetRepository<ICollectionConfigRepository<TEntity>>();
+
+            var values = (await repository.GetAllAsync())
                 .Select(row =>
                 {
-                    var model = new T();
+                    var model = new TModel();
                     model.CopyValues(row);
                     return model;
                 });
@@ -36,13 +37,13 @@ namespace MarkNet.Core.Services.Configs
             _cashManager.Set(values);
         }
 
-        public Task<IEnumerable<T>> GetAsync()
+        public Task<IEnumerable<TModel>> GetAsync()
         {
             var values = _cashManager.Get();
             return Task.FromResult(values);
         }
 
-        public async Task SetAsync(IEnumerable<T> values)
+        public async Task SetAsync(IEnumerable<TModel> values)
         {
             var entities = values.Select(row =>
             {
@@ -51,8 +52,10 @@ namespace MarkNet.Core.Services.Configs
                 return entity;
             });
 
-            await _repository.AddRangeAsync(entities);
-            await _unitOfWork.SaveChangeAsync();
+            var repository = _mergedRepository.GetRepository<ICollectionConfigRepository<TEntity>>();
+
+            await repository.AddRangeAsync(entities);
+            await _mergedRepository.SaveChangeAsync();
 
             _cashManager.Set(values);
         }

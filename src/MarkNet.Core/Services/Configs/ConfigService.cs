@@ -2,48 +2,51 @@
 using MarkNet.Core.Repositories.Commons;
 using MarkNet.Core.Repositories.Configs;
 using MarkNet.Core.Services.Cashings;
+using Microsoft.EntityFrameworkCore;
 
 namespace MarkNet.Core.Services.Configs
 {
-    public abstract class ConfigService<T, TEntity>
-        where T : PropertyModel<T>, new()
-        where TEntity : T, new()
+    public abstract class ConfigService<TModel, TEntity, TContext>
+        where TModel : PropertyModel<TModel>, new()
+        where TEntity : TModel, new()
+        where TContext : DbContext
     {
-        private readonly CashManager<T> _cashManager;
-        private readonly IConfigRepository<TEntity> _repository;
-        private readonly IUnitOfWork _unitOfWork;
+        private readonly CashManager<TModel> _cashManager;
+        private readonly IMergedRepository<TContext> _mergedRepository;
 
         public ConfigService(
-            CashManager<T> cashManager,
-            IConfigRepository<TEntity> repository,
-            IUnitOfWork unitOfWork)
+            CashManager<TModel> cashManager,
+            IMergedRepository<TContext> mergedRepository)
         {
             _cashManager = cashManager;
-            _repository = repository;
-            _unitOfWork = unitOfWork;
+            _mergedRepository = mergedRepository;
         }
 
         public async Task InitializeAsync()
         {
-            var entity = await _repository.GetAsync();
-            var model = new T();
+            var repository = _mergedRepository.GetRepository<IConfigRepository<TEntity>>();
+
+            var entity = await repository.GetAsync();
+            var model = new TModel();
             model.CopyValues(entity);
             _cashManager.Set(model);
         }
 
-        public Task<T> GetAsync()
+        public Task<TModel> GetAsync()
         {
             var values = _cashManager.Get();
             return Task.FromResult(values);
         }
 
-        public async Task SetAsync(T values)
+        public async Task SetAsync(TModel values)
         {
             var entity = new TEntity();
             entity.CopyValues(values);
 
-            await _repository.SetAsync(entity);
-            await _unitOfWork.SaveChangeAsync();
+            var repository = _mergedRepository.GetRepository<IConfigRepository<TEntity>>();
+
+            await repository.SetAsync(entity);
+            await _mergedRepository.SaveChangeAsync();
 
             _cashManager.Set(values);
         }

@@ -1,6 +1,6 @@
 ﻿using MarkNet.Core.Models;
 
-namespace BaseNet.Core.Test.Models
+namespace MarkNet.Test.Models
 {
     public class MockPropertyModel : PropertyModel<MockPropertyModel>
     {

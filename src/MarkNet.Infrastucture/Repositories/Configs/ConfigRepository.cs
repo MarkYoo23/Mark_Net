@@ -4,12 +4,12 @@ using Microsoft.EntityFrameworkCore;
 
 namespace MarkNet.Infrastructure.Repositories.Configs
 {
-    public class ConfigurationRepository<TEntity> : IConfigRepository<TEntity>
+    public class ConfigRepository<TEntity> : IConfigRepository<TEntity>
         where TEntity : class, IConfigEntity
     {
         private readonly DbSet<TEntity> _entities;
 
-        public ConfigurationRepository(DbSet<TEntity> entities)
+        public ConfigRepository(DbSet<TEntity> entities)
         {
             _entities = entities;
         }

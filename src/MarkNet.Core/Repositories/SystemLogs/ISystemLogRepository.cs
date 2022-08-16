@@ -1,8 +1,9 @@
 ﻿using MarkNet.Core.Models.SystemLogs;
+using MarkNet.Core.Repositories.Commons;
 
 namespace MarkNet.Core.Repositories.SystemLogs
 {
-    public interface ISystemLogRepository<T>
+    public interface ISystemLogRepository<T> : IRepository
     {
         Task<T> AddAsync(T log);
         Task AddRangeAsync(IEnumerable<T> logs);
