@@ -2,18 +2,16 @@
 using MarkNet.Core.Models.SystemLogs;
 using MarkNet.Core.Repositories.Commons;
 using MarkNet.Core.Repositories.SystemLogs;
-using Microsoft.EntityFrameworkCore;
 
 namespace MarkNet.Core.Services.SystemLogs
 {
-    public abstract class SystemLogService<TEntity, TContext> 
+    public abstract class SystemLogService<TEntity> 
         where TEntity : ISystemLogEntity
-        where TContext : DbContext
     {
         private readonly LogMapper _mapper = new LogMapper();
-        private readonly IMergedRepository<TContext> _mergedRepository;
+        private readonly IMergedRepository _mergedRepository;
 
-        public SystemLogService(IMergedRepository<TContext> mergedRepository)
+        public SystemLogService(IMergedRepository mergedRepository)
         {
             _mergedRepository = mergedRepository;
         }

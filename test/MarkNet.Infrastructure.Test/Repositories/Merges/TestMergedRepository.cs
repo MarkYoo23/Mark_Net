@@ -9,7 +9,11 @@ using MarkNet.Test.Entities;
 
 namespace MarkNet.Test.Repositories.Merges
 {
-    public class TestMergedRepository : MergedRepository<TestContext>
+    public interface ITestMergedRepository : IMergedRepository 
+    {
+    }
+
+    public class TestMergedRepository : MergedRepository<TestContext>, ITestMergedRepository
     {
         public TestMergedRepository(TestContext context) : base(context)
         {

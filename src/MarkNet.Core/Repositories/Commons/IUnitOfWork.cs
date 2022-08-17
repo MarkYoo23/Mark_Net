@@ -1,10 +1,8 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Storage;
+﻿using Microsoft.EntityFrameworkCore.Storage;
 
 namespace MarkNet.Core.Repositories.Commons
 {
-    public interface IUnitOfWork<TContext>
-        where TContext : DbContext
+    public interface IUnitOfWork
     {
         Task<IDbContextTransaction> CreateTransactionAsync();
         Task<bool> SaveEntitiesAsync();

@@ -28,7 +28,7 @@ namespace MarkNet.Test.Services
                         return new TestContext(options);
                     });
 
-                    services.AddScoped<IMergedRepository<TestContext>, TestMergedRepository>();
+                    services.AddScoped<ITestMergedRepository, TestMergedRepository>();
 
                     services.AddSingleton<CollectionCashManager<FakeCollectionConfig>>();
                     services.AddScoped<FakeCollectionConfigService>();

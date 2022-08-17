@@ -1,6 +1,6 @@
 using MarkNet.Core.Repositories.Commons;
-using MarkNet.Test.Contexts;
 using MarkNet.Test.Entities;
+using MarkNet.Test.Repositories.Merges;
 using MarkNet.Test.Services;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -24,7 +24,7 @@ namespace MarkNet.Test.UnitTests.Repositories
 
             var exception = Record.Exception(() =>
             {
-                var mergedRepository = serviceProvider.GetRequiredService<IMergedRepository<TestContext>>();
+                var mergedRepository = serviceProvider.GetRequiredService<ITestMergedRepository>();
                 mergedRepository.GetRepository<IGenericRepository<FakeOneEntity>>();
                 mergedRepository.GetRepository<IGenericRepository<FakeTwoEntity>>();
             });

@@ -12,11 +12,11 @@ namespace MarkNet.Core.Services.Configs
         where TContext : DbContext
     {
         private readonly CashManager<TModel> _cashManager;
-        private readonly IMergedRepository<TContext> _mergedRepository;
+        private readonly IMergedRepository _mergedRepository;
 
         public ConfigService(
             CashManager<TModel> cashManager,
-            IMergedRepository<TContext> mergedRepository)
+            IMergedRepository mergedRepository)
         {
             _cashManager = cashManager;
             _mergedRepository = mergedRepository;

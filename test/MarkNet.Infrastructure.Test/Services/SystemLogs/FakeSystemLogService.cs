@@ -1,13 +1,12 @@
-﻿using MarkNet.Core.Repositories.Commons;
-using MarkNet.Core.Services.SystemLogs;
-using MarkNet.Test.Contexts;
+﻿using MarkNet.Core.Services.SystemLogs;
 using MarkNet.Test.Entities;
+using MarkNet.Test.Repositories.Merges;
 
 namespace MarkNet.Test.Services.SystemLogs
 {
-    internal class FakeSystemLogService : SystemLogService<FakeSystemLogEntity, TestContext>
+    internal class FakeSystemLogService : SystemLogService<FakeSystemLogEntity>
     {
-        public FakeSystemLogService(IMergedRepository<TestContext> mergedRepository) : base(mergedRepository)
+        public FakeSystemLogService(ITestMergedRepository mergedRepository) : base(mergedRepository)
         {
         }
     }
