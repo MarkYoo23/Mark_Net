@@ -2,21 +2,19 @@
 using MarkNet.Core.Repositories.Commons;
 using MarkNet.Core.Repositories.Configs;
 using MarkNet.Core.Services.Cashings;
-using Microsoft.EntityFrameworkCore;
 
 namespace MarkNet.Core.Services.Configs
 {
     public abstract class CollectionConfigService<TModel, TEntity, TContext>
         where TModel : PropertyModel<TModel>, new()
         where TEntity : TModel, new()
-        where TContext : DbContext
     {
         private readonly CollectionCashManager<TModel> _cashManager;
-        private readonly IMergedRepository<TContext> _mergedRepository;
+        private readonly IMergedRepository _mergedRepository;
 
         public CollectionConfigService(
             CollectionCashManager<TModel> cashManager,
-            IMergedRepository<TContext> mergedRepository)
+            IMergedRepository mergedRepository)
         {
             _cashManager = cashManager;
             _mergedRepository = mergedRepository;

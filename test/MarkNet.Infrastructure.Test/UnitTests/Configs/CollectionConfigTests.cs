@@ -1,7 +1,4 @@
-﻿using MarkNet.Core.Repositories.Commons;
-using MarkNet.Infrastructure.Repositories.Commons;
-using MarkNet.Test.Entities;
-using MarkNet.Test.Services;
+﻿using MarkNet.Test.Services;
 using MarkNet.Test.Services.Configs;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;

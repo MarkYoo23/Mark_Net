@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace MarkNet.Infrastructure.Repositories.Commons
 {
-    public class MergedRepository<TContext> : UnitOfWork<TContext>, IMergedRepository<TContext>
+    public class MergedRepository<TContext> : UnitOfWork<TContext>, IMergedRepository
          where TContext : DbContext
     {
         private Dictionary<string, IRepository> _repositories;

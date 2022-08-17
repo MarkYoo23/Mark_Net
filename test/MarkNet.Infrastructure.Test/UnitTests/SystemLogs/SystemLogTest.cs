@@ -1,15 +1,8 @@
-﻿using MarkNet.Test.Services.Configs;
-using MarkNet.Test.Services;
+﻿using MarkNet.Test.Services;
 using Microsoft.Extensions.Hosting;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using MarkNet.Test.Services.SystemLogs;
 using MarkNet.Test.Entities;
-using Newtonsoft.Json.Linq;
 
 namespace MarkNet.Test.UnitTests.SystemLogs
 {

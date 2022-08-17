@@ -1,9 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
-
-namespace MarkNet.Core.Repositories.Commons
+﻿namespace MarkNet.Core.Repositories.Commons
 {
-    public interface IMergedRepository<TContext> : IUnitOfWork<TContext>
-        where TContext : DbContext
+    public interface IMergedRepository : IUnitOfWork
     {
         T GetRepository<T>() where T : class;
     }

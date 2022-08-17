@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace MarkNet.Infrastructure.Repositories.Commons
 {
-    public class UnitOfWork<TContext> : IUnitOfWork<TContext>
+    public class UnitOfWork<TContext> : IUnitOfWork
          where TContext : DbContext
     {
         private readonly TContext _context;

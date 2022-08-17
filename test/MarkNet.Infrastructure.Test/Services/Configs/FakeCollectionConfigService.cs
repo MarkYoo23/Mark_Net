@@ -1,9 +1,9 @@
-﻿using MarkNet.Core.Repositories.Commons;
-using MarkNet.Core.Services.Cashings;
+﻿using MarkNet.Core.Services.Cashings;
 using MarkNet.Core.Services.Configs;
 using MarkNet.Test.Contexts;
 using MarkNet.Test.Entities;
 using MarkNet.Test.Models;
+using MarkNet.Test.Repositories.Merges;
 
 namespace MarkNet.Test.Services.Configs
 {
@@ -11,7 +11,7 @@ namespace MarkNet.Test.Services.Configs
     {
         public FakeCollectionConfigService(
             CollectionCashManager<FakeCollectionConfig> cashManager,
-            IMergedRepository<TestContext> mergedRepository)
+            ITestMergedRepository mergedRepository)
             : base(cashManager, mergedRepository)
         {
         }
