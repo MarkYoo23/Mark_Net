@@ -5,7 +5,7 @@ using MarkNet.Core.Services.Cashings;
 
 namespace MarkNet.Core.Services.Configs
 {
-    public abstract class CollectionConfigService<TModel, TEntity, TContext>
+    public abstract class CollectionConfigService<TModel, TEntity>
         where TModel : PropertyModel<TModel>, new()
         where TEntity : TModel, new()
     {

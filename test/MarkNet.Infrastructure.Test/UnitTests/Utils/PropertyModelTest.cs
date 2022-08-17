@@ -1,6 +1,6 @@
 ﻿using MarkNet.Test.Models;
 
-namespace MarkNet.Test.UnitTests
+namespace MarkNet.Test.UnitTests.Utils
 {
     public class PropertyModelTest
     {

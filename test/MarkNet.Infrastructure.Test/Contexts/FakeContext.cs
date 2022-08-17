@@ -13,6 +13,7 @@ namespace MarkNet.Test.Contexts
         public DbSet<FakeCollectionConfigEntity> FakeCollectionConfigs { get; set; } = null!;
         public DbSet<FakeConfigEntity> FakeConfigs { get; set; } = null!;
         public DbSet<FakeSystemLogEntity> FakeSystemLogs { get; set; } = null!;
+        public DbSet<FakeGenericEntity> FakeGenerics { get; set; } = null!;
 
         public TestContext(DbContextOptions options) : base(options)
         {
@@ -32,6 +33,9 @@ namespace MarkNet.Test.Contexts
 
             modelBuilder.ApplyConfiguration(
                 new SystemLogSchemaDefinition<FakeSystemLogEntity>());
+
+            modelBuilder.ApplyConfiguration(
+                new EntitySchemaDefinition<FakeGenericEntity>());
         }
     }
 }
