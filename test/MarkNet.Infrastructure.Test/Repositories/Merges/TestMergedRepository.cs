@@ -9,7 +9,7 @@ using MarkNet.Test.Entities;
 
 namespace MarkNet.Test.Repositories.Merges
 {
-    public interface ITestMergedRepository : IMergedRepository 
+    public interface ITestMergedRepository : IMergedRepository
     {
     }
 
@@ -17,20 +17,29 @@ namespace MarkNet.Test.Repositories.Merges
     {
         public TestMergedRepository(TestContext context) : base(context)
         {
-            var fakeOneRepository = new GenericRepository<FakeOneEntity>(context.FakeOnes);
-            RegisterRepository(typeof(IGenericRepository<FakeOneEntity>), fakeOneRepository);
+            RegisterRepository(
+                typeof(IGenericRepository<FakeOneEntity>),
+                new GenericRepository<FakeOneEntity>(context.FakeOnes));
 
-            var fakeTwoRepository = new GenericRepository<FakeTwoEntity>(context.FakeTwos);
-            RegisterRepository(typeof(IGenericRepository<FakeTwoEntity>), fakeTwoRepository);
+            RegisterRepository(
+                typeof(IGenericRepository<FakeTwoEntity>),
+                new GenericRepository<FakeTwoEntity>(context.FakeTwos));
 
-            var fakeCollectionConfigRepository = new CollectionConfigRepository<FakeCollectionConfigEntity>(context.FakeCollectionConfigs);
-            RegisterRepository(typeof(ICollectionConfigRepository<FakeCollectionConfigEntity>), fakeCollectionConfigRepository);
+            RegisterRepository(
+                typeof(ICollectionConfigRepository<FakeCollectionConfigEntity>),
+                new CollectionConfigRepository<FakeCollectionConfigEntity>(context.FakeCollectionConfigs));
 
-            var fakeConfigRepository = new ConfigRepository<FakeConfigEntity>(context.FakeConfigs);
-            RegisterRepository(typeof(IConfigRepository<FakeConfigEntity>), fakeConfigRepository);
+            RegisterRepository(
+                typeof(IConfigRepository<FakeConfigEntity>),
+                new ConfigRepository<FakeConfigEntity>(context.FakeConfigs));
 
-            var fakeSystemLogRepository = new SystemLogRepository<FakeSystemLogEntity>(context.FakeSystemLogs);
-            RegisterRepository(typeof(ISystemLogRepository<FakeSystemLogEntity>), fakeSystemLogRepository);
+            RegisterRepository(
+                typeof(ISystemLogRepository<FakeSystemLogEntity>),
+                new SystemLogRepository<FakeSystemLogEntity>(context.FakeSystemLogs));
+
+            RegisterRepository(
+                typeof(IGenericRepository<FakeGenericEntity>),
+                new GenericRepository<FakeGenericEntity>(context.FakeGenerics));
         }
     }
 }
