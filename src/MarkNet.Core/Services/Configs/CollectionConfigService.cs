@@ -52,6 +52,9 @@ namespace MarkNet.Core.Services.Configs
 
             var repository = _mergedRepository.GetRepository<ICollectionConfigRepository<TEntity>>();
 
+            var beforeEntities = await repository.GetAllAsync();
+            await repository.RemoveAllAsync(beforeEntities);
+
             await repository.AddRangeAsync(entities);
             await _mergedRepository.SaveChangeAsync();
 
