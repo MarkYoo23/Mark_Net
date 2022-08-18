@@ -1,4 +1,5 @@
-﻿using MarkNet.Core.Models;
+﻿using MarkNet.Core.Entities.Configs;
+using MarkNet.Core.Models;
 using MarkNet.Core.Repositories.Commons;
 using MarkNet.Core.Repositories.Configs;
 using MarkNet.Core.Services.Cashings;
@@ -7,7 +8,7 @@ namespace MarkNet.Core.Services.Configs
 {
     public abstract class CollectionConfigService<TModel, TEntity>
         where TModel : PropertyModel<TModel>, new()
-        where TEntity : TModel, new()
+        where TEntity : TModel, ICollectionConfigEntity, new()
     {
         private readonly CollectionCashManager<TModel> _cashManager;
         private readonly IMergedRepository _mergedRepository;
@@ -43,18 +44,21 @@ namespace MarkNet.Core.Services.Configs
 
         public async Task SetAsync(IEnumerable<TModel> values)
         {
-            var entities = values.Select(row =>
-            {
-                var entity = new TEntity();
-                entity.CopyValues(row);
-                return entity;
-            });
-
             var repository = _mergedRepository.GetRepository<ICollectionConfigRepository<TEntity>>();
 
             var beforeEntities = await repository.GetAllAsync();
             await repository.RemoveAllAsync(beforeEntities);
+            await _mergedRepository.SaveChangeAsync();
 
+            var number = 0;
+            var entities = values.Select(row =>
+            {
+                var entity = new TEntity();
+                entity.CopyValues(row);
+                entity.Id = 0;
+                entity.Number = ++number;
+                return entity;
+            });
             await repository.AddRangeAsync(entities);
             await _mergedRepository.SaveChangeAsync();
 

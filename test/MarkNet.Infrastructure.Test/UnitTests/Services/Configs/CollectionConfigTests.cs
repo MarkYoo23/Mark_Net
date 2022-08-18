@@ -73,11 +73,10 @@ namespace MarkNet.Test.UnitTests.Configs
         {
             using var scope = _host.Services.CreateScope();
             var serviceProvider = scope.ServiceProvider;
+            var service = serviceProvider.GetRequiredService<FakeCollectionConfigService>();
 
             var exception = await Record.ExceptionAsync(async () =>
             {
-                var service = serviceProvider.GetRequiredService<FakeCollectionConfigService>();
-
                 var configs = new FakeCollectionConfigEntity[]
                 {
                     new FakeCollectionConfigEntity()
@@ -107,8 +106,6 @@ namespace MarkNet.Test.UnitTests.Configs
 
             exception = await Record.ExceptionAsync(async () =>
             {
-                var service = serviceProvider.GetRequiredService<FakeCollectionConfigService>();
-
                 var configs = new FakeCollectionConfigEntity[]
                 {
                     new FakeCollectionConfigEntity()
