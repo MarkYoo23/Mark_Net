@@ -4,9 +4,9 @@
 		<TargetFramework>net6.0</TargetFramework>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
-		<Version>1.2.7</Version>
-		<PackageProjectUrl>https://github.com/rd-dhyoo/Base_Net</PackageProjectUrl>
-		<RepositoryUrl>https://github.com/rd-dhyoo/Base_Net</RepositoryUrl>
+		<Version>1.2.8</Version>
+		<PackageProjectUrl>https://github.com/rd-dhyoo/Mark_Net</PackageProjectUrl>
+		<RepositoryUrl>https://github.com/rd-dhyoo/Mark_Net</RepositoryUrl>
 	</PropertyGroup>
 
 	<ItemGroup>
