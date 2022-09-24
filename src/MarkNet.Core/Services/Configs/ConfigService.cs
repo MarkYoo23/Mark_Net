@@ -38,11 +38,11 @@ namespace MarkNet.Core.Services.Configs
 
         public async Task SetAsync(TModel values)
         {
-            var entity = new TEntity();
-            entity.CopyValues(values);
-
             var repository = _mergedRepository.GetRepository<IConfigRepository<TEntity>>();
 
+            var entity = await repository.GetAsync();
+            entity.CopyValues(values);
+            
             await repository.SetAsync(entity);
             await _mergedRepository.SaveChangeAsync();
 
