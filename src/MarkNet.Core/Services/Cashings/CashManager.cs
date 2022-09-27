@@ -5,7 +5,17 @@ namespace MarkNet.Core.Services.Cashings
     public class CashManager<T> where T : PropertyModel<T>, new()
     {
         private object _locker = new object();
-        private T _model = new T();
+        private T _model;
+
+        public CashManager()
+        {
+            _model = new T();
+        }
+
+        public CashManager(T model)
+        {
+            _model = model;
+        }
 
         public T Get()
         {

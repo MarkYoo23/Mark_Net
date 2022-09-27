@@ -1,10 +1,8 @@
-﻿using Microsoft.EntityFrameworkCore.Storage;
-
-namespace MarkNet.Core.Repositories.Commons
+﻿namespace MarkNet.Core.Repositories.Commons
 {
     public interface IUnitOfWork
     {
-        Task<IDbContextTransaction> CreateTransactionAsync();
+        // TODO : (dh) Add Transaction.
         Task<bool> SaveEntitiesAsync();
         Task<int> SaveChangeAsync();
     }
