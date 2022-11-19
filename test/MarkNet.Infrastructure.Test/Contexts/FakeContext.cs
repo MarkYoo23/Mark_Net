@@ -29,7 +29,13 @@ namespace MarkNet.Test.Contexts
                     new FakeCollectionConfigEntity[] { }));
 
             modelBuilder.ApplyConfiguration(
-                new ConfigSchemaDefinition<FakeConfigEntity>());
+                new ConfigSchemaDefinition<FakeConfigEntity>(
+                    new FakeConfigEntity()
+                    {
+                        Id = 1,
+                        Value = 1,
+                    })
+                );
 
             modelBuilder.ApplyConfiguration(
                 new SystemLogSchemaDefinition<FakeSystemLogEntity>());
