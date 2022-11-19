@@ -40,20 +40,77 @@ namespace MarkNet.Test.UnitTests.Configs
 
             await service.InitializeAsync();
 
-            var seq1Response = await service.GetAsync();
-            Assert.True(seq1Response.IsSuccess);
-
-            var seq1Model = seq1Response.Model;
+            var seq1Model = await service.GetAsync();
             Assert.Equal(1, seq1Model.Value);
 
             var changeModel = new FakeConfig() { Value = 2 };
             await service.SetAsync(changeModel);
 
-            var seq2Response = await service.GetAsync();
-            Assert.True(seq2Response.IsSuccess);
-
-            var seq2Model = seq2Response.Model;
+            var seq2Model = await service.GetAsync();
             Assert.Equal(changeModel.Value, seq2Model.Value);
+        }
+
+        [Fact]
+        public async Task SetWithGetMany_Service_MeetPerformanceCriteria()
+        {
+            using (var scope = _host.Services.CreateScope())
+            {
+                var serviceProvider = scope.ServiceProvider;
+
+                var service = serviceProvider.GetRequiredService<FakeConfigService>();
+                await service.InitializeAsync();
+
+            }
+            
+            var tasks = new List<Task>();
+
+            for (int i = 0; i < 100; i++)
+            {
+                tasks.Add(new Task(async () =>
+                {
+                    var scope = _host.Services.CreateScope();
+                    var serviceProvider = scope.ServiceProvider;
+                    var service = serviceProvider.GetRequiredService<FakeConfigService>();
+
+                    var value = new FakeConfig()
+                    {
+                        Value = i
+                    };
+
+                    var delay = Random.Shared.Next(0, 10);
+                    await Task.Delay(delay);
+                    await service.SetAsync(value);
+                }));
+            }
+
+            for (int i = 0; i < 10000; i++)
+            {
+                var scope = _host.Services.CreateScope();
+                var serviceProvider = scope.ServiceProvider;
+                var service = serviceProvider.GetRequiredService<FakeConfigService>();
+
+                tasks.Add(new Task(async () =>
+                {
+                    var delay = Random.Shared.Next(0, 30);
+                    await Task.Delay(delay);
+                    await service.GetAsync();
+                }));
+            }
+
+            var startTime = DateTime.Now;
+
+            foreach (var task in tasks)
+            {
+                task.Start();
+            }
+            
+            Task.WaitAll(tasks.ToArray());
+
+            var endTime = DateTime.Now;
+
+            var diff = endTime - startTime;
+
+            Assert.True(diff.TotalSeconds < 1);
         }
     }
 }

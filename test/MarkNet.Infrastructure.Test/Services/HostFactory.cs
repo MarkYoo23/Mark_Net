@@ -1,14 +1,13 @@
-﻿using MarkNet.Core.Repositories.Commons;
-using MarkNet.Core.Services.Cashings;
+﻿using MarkNet.Core.Services.Cashings;
 using MarkNet.Test.Contexts;
 using MarkNet.Test.Models;
 using MarkNet.Test.Repositories.Merges;
 using MarkNet.Test.Services.Configs;
 using MarkNet.Test.Services.SystemLogs;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using System.Reflection.Metadata.Ecma335;
 
 namespace MarkNet.Test.Services
 {
@@ -16,30 +15,28 @@ namespace MarkNet.Test.Services
     {
         public static IHost Create()
         {
+            var inMemoryDatabaseRoot = new InMemoryDatabaseRoot();
+            var databaseName = $"test_{Guid.NewGuid()}";
+
             var host = Host.CreateDefaultBuilder()
-                .ConfigureServices((hostContext, services) =>
-                {
-                    services.AddSingleton((builder) =>
+                    .ConfigureServices((hostContext, services) =>
                     {
-                        var databaseName = $"test_{Guid.NewGuid()}";
-                        var options = new DbContextOptionsBuilder<TestContext>()
-                            .UseInMemoryDatabase(databaseName)
-                            .Options;
+                        services.AddDbContext<TestContext>(options =>
+                        {
+                            options.UseInMemoryDatabase(databaseName, inMemoryDatabaseRoot);
+                        });
 
-                        return new TestContext(options);
-                    });
+                        services.AddScoped<ITestMergedRepository, TestMergedRepository>();
 
-                    services.AddScoped<ITestMergedRepository, TestMergedRepository>();
+                        services.AddSingleton<CollectionCashManager<FakeCollectionConfig>>();
+                        services.AddScoped<FakeCollectionConfigService>();
 
-                    services.AddSingleton<CollectionCashManager<FakeCollectionConfig>>();
-                    services.AddScoped<FakeCollectionConfigService>();
+                        services.AddSingleton<CashManager<FakeConfig>>();
+                        services.AddScoped<FakeConfigService>();
 
-                    services.AddSingleton<CashManager<FakeConfig>>(); 
-                    services.AddScoped<FakeConfigService>();
-
-                    services.AddScoped<FakeSystemLogService>();
-                })
-                .Build();
+                        services.AddScoped<FakeSystemLogService>();
+                    })
+                    .Build();
 
             using (var scope = host.Services.CreateScope())
             {

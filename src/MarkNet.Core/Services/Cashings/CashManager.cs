@@ -1,12 +1,13 @@
 ﻿using MarkNet.Core.Models;
-using MarkNet.Core.Models.Cashing;
 
 namespace MarkNet.Core.Services.Cashings
 {
     public class CashManager<T> where T : PropertyModel<T>, new()
     {
-        private const int _millisecondsTimeout = 1000;
-        private SemaphoreSlim _semaphoreSlim = new SemaphoreSlim(1);
+        private const int _millisecondsWriteTimeout = 1000;
+        private const int _millisecondsReadDelay = 1;
+
+        private readonly SemaphoreSlim _semaphoreSlim = new SemaphoreSlim(1);
         private T _model;
 
         public CashManager()
@@ -19,49 +20,25 @@ namespace MarkNet.Core.Services.Cashings
             _model = model;
         }
 
-        public T Get()
+        public async Task<T> GetAsync()
         {
-            T result;
+            await WaitCanReadAsync();
 
-            _semaphoreSlim.Wait();
-
-            result = _model.Clone();
-
-            _semaphoreSlim.Release();
-            return result;
+            var model = _model;
+            return model.Clone();
         }
 
-        public async Task<GetCashingResponse<T>> GetAsync()
+        private async Task WaitCanReadAsync()
         {
-            T model = null!;
-
-            if (!await _semaphoreSlim.WaitAsync(CashManager<T>._millisecondsTimeout))
+            while (!IsReadable()) 
             {
-                return new GetCashingResponse<T>()
-                {
-                    IsSuccess = false,
-                    Model = null!,
-                };
+                await Task.Delay(_millisecondsReadDelay);
             }
-
-            model = _model.Clone();
-
-            _semaphoreSlim.Release();
-
-            return new GetCashingResponse<T>() 
-            {
-                IsSuccess = true,
-                Model = model,
-            };
         }
 
-        public void Set(T model)
+        private bool IsReadable()
         {
-            _semaphoreSlim.Wait();
-
-            _model.CopyValues(model);
-
-            _semaphoreSlim.Release();
+            return _semaphoreSlim.CurrentCount > 0;
         }
 
         public async Task<bool> SetAsync(T model)
@@ -69,7 +46,7 @@ namespace MarkNet.Core.Services.Cashings
             var newModel = new T();
             newModel.CopyValues(model);
 
-            if (!await _semaphoreSlim.WaitAsync(CashManager<T>._millisecondsTimeout))
+            if (!await _semaphoreSlim.WaitAsync(CashManager<T>._millisecondsWriteTimeout))
             {
                 return false;
             }
@@ -81,18 +58,9 @@ namespace MarkNet.Core.Services.Cashings
             return true;
         }
 
-        public void Patch(T model)
-        {
-            _semaphoreSlim.Wait();
-
-            _model.PatchValues(model);
-
-            _semaphoreSlim.Release();
-        }
-
         public async Task<bool> PatchAsync(T model)
         {
-            if (!await _semaphoreSlim.WaitAsync(CashManager<T>._millisecondsTimeout))
+            if (!await _semaphoreSlim.WaitAsync(CashManager<T>._millisecondsWriteTimeout))
             {
                 return false;
             }
