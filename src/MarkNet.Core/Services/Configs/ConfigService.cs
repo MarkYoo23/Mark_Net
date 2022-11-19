@@ -1,5 +1,4 @@
 ﻿using MarkNet.Core.Models;
-using MarkNet.Core.Models.Cashing;
 using MarkNet.Core.Repositories.Commons;
 using MarkNet.Core.Repositories.Configs;
 using MarkNet.Core.Services.Cashings;
@@ -28,18 +27,20 @@ namespace MarkNet.Core.Services.Configs
             var entity = await repository.GetAsync();
             var model = new TModel();
             model.CopyValues(entity);
-            _cashManager.Set(model);
+
+            await _cashManager.SetAsync(model);
         }
 
-        public async Task<GetCashingResponse<TModel>> GetAsync() => await _cashManager.GetAsync();
+        public async Task<TModel> GetAsync() => await _cashManager.GetAsync();
 
         public async Task SetAsync(TModel values)
         {
+            // Need Locking
             var repository = _mergedRepository.GetRepository<IConfigRepository<TEntity>>();
 
             var entity = await repository.GetAsync();
             entity.CopyValues(values);
-            
+
             await repository.SetAsync(entity);
             await _mergedRepository.SaveChangeAsync();
 
