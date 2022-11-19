@@ -8,6 +8,7 @@ using MarkNet.Test.Services.SystemLogs;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using System.Reflection.Metadata.Ecma335;
 
 namespace MarkNet.Test.Services
 {
@@ -33,10 +34,10 @@ namespace MarkNet.Test.Services
                     services.AddSingleton<CollectionCashManager<FakeCollectionConfig>>();
                     services.AddScoped<FakeCollectionConfigService>();
 
-                    services.AddSingleton<CashManager<FakeConfig>>();
+                    services.AddSingleton<CashManager<FakeConfig>>(); 
                     services.AddScoped<FakeConfigService>();
 
-                    services.AddScoped<FakeSystemLogService>();                    
+                    services.AddScoped<FakeSystemLogService>();
                 })
                 .Build();
 
