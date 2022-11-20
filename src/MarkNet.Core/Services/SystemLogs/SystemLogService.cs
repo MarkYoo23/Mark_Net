@@ -5,7 +5,7 @@ using MarkNet.Core.Repositories.SystemLogs;
 
 namespace MarkNet.Core.Services.SystemLogs
 {
-    public abstract class SystemLogService<TEntity> 
+    public abstract class SystemLogService<TEntity>
         where TEntity : ISystemLogEntity
     {
         private readonly LogMapper _mapper = new LogMapper();
@@ -38,9 +38,15 @@ namespace MarkNet.Core.Services.SystemLogs
         public async Task<IEnumerable<TEntity>> GetRangeAsync(DateRangedParameter parameter)
         {
             var repository = _mergedRepository.GetRepository<ISystemLogRepository<TEntity>>();
-
             var records = await repository.GetLogsAsync(parameter);
             return records;
+        }
+
+        public async Task<IEnumerable<TEntity>> GetLastAsync(int count)
+        {
+            var repository = _mergedRepository.GetRepository<ISystemLogRepository<TEntity>>();
+            var entities = await repository.GetLastAsync(count);
+            return entities;
         }
     }
 }

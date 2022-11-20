@@ -49,6 +49,7 @@ namespace MarkNet.Infrastructure.Repositories.SystemLogs
             return await _entities
                 .AsNoTracking()
                 .Where(log => parameter.From <= log.Created && log.Created <= parameter.To)
+                .OrderByDescending(log => log.Created)
                 .ToArrayAsync();
         }
 
@@ -56,7 +57,7 @@ namespace MarkNet.Infrastructure.Repositories.SystemLogs
         {
             return await _entities
                .AsNoTracking()
-               .OrderByDescending(log => log.Created)
+               .OrderByDescending(log => log.Id)
                .Take(count)
                .ToArrayAsync();
         }
