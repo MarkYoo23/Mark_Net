@@ -20,6 +20,14 @@ namespace MarkNet.Core.Services.Cashings
             _model = model;
         }
 
+        public T Get()
+        {
+            WaitCanReadAsync().Wait();
+
+            var model = _model;
+            return model.Clone();
+        }
+
         public async Task<T> GetAsync()
         {
             await WaitCanReadAsync();
