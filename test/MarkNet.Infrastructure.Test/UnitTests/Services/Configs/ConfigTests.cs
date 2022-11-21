@@ -51,7 +51,7 @@ namespace MarkNet.Test.UnitTests.Configs
         }
 
         [Fact]
-        public async Task SetWithGetMany_Service_MeetPerformanceCriteria()
+        public async Task SetWithGetMany_Service_MeetAsyncPerformanceCriteria()
         {
             using (var scope = _host.Services.CreateScope())
             {
@@ -59,7 +59,6 @@ namespace MarkNet.Test.UnitTests.Configs
 
                 var service = serviceProvider.GetRequiredService<FakeConfigService>();
                 await service.InitializeAsync();
-
             }
             
             var tasks = new List<Task>();
@@ -104,6 +103,68 @@ namespace MarkNet.Test.UnitTests.Configs
                 task.Start();
             }
             
+            Task.WaitAll(tasks.ToArray());
+
+            var endTime = DateTime.Now;
+
+            var diff = endTime - startTime;
+
+            Assert.True(diff.TotalSeconds < 1);
+        }
+
+        [Fact]
+        public async Task SetWithGetMany_Service_MeetSyncPerformanceCriteria()
+        {
+            using (var scope = _host.Services.CreateScope())
+            {
+                var serviceProvider = scope.ServiceProvider;
+
+                var service = serviceProvider.GetRequiredService<FakeConfigService>();
+                await service.InitializeAsync();
+            }
+
+            var tasks = new List<Task>();
+
+            for (int i = 0; i < 100; i++)
+            {
+                tasks.Add(new Task(async () =>
+                {
+                    var scope = _host.Services.CreateScope();
+                    var serviceProvider = scope.ServiceProvider;
+                    var service = serviceProvider.GetRequiredService<FakeConfigService>();
+
+                    var value = new FakeConfig()
+                    {
+                        Value = i
+                    };
+
+                    var delay = Random.Shared.Next(0, 10);
+                    await Task.Delay(delay);
+                    await service.SetAsync(value);
+                }));
+            }
+
+            for (int i = 0; i < 10000; i++)
+            {
+                var scope = _host.Services.CreateScope();
+                var serviceProvider = scope.ServiceProvider;
+                var service = serviceProvider.GetRequiredService<FakeConfigService>();
+
+                tasks.Add(new Task(async () =>
+                {
+                    var delay = Random.Shared.Next(0, 30);
+                    await Task.Delay(delay);
+                    service.Get();
+                }));
+            }
+
+            var startTime = DateTime.Now;
+
+            foreach (var task in tasks)
+            {
+                task.Start();
+            }
+
             Task.WaitAll(tasks.ToArray());
 
             var endTime = DateTime.Now;

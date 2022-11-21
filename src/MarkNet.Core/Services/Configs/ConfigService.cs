@@ -32,6 +32,7 @@ namespace MarkNet.Core.Services.Configs
         }
 
         public async Task<TModel> GetAsync() => await _cashManager.GetAsync();
+        public TModel Get() => _cashManager.Get();
 
         public async Task SetAsync(TModel values)
         {
