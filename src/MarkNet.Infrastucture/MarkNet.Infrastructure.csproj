@@ -1,25 +1,20 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFrameworks>net7;net6</TargetFrameworks>
+		<TargetFramework>net6.0</TargetFramework>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
-		<Version>2.1.4</Version>
+		<Version>2.2.1</Version>
 		<PackageProjectUrl>https://github.com/rd-dhyoo/Mark_Net</PackageProjectUrl>
 		<RepositoryUrl>https://github.com/rd-dhyoo/Mark_Net</RepositoryUrl>
 	</PropertyGroup>
 
-
-	<ItemGroup Condition="'$(TargetFramework)' == 'net6'">
+	<ItemGroup>
 		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.0" />
 	</ItemGroup>
 
-	<ItemGroup Condition="'$(TargetFramework)' == 'net7'">
-		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.0" />
-	</ItemGroup>
-
 	<ItemGroup>
-	  <ProjectReference Include="..\MarkNet.Core\MarkNet.Core.csproj" />
+		<ProjectReference Include="..\MarkNet.Core\MarkNet.Core.csproj" />
 	</ItemGroup>
 
 </Project>
