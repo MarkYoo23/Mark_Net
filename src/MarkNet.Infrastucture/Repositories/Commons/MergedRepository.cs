@@ -1,5 +1,7 @@
 ﻿using MarkNet.Core.Repositories.Commons;
 using Microsoft.EntityFrameworkCore;
+using System;
+using System.Collections.Generic;
 
 namespace MarkNet.Infrastructure.Repositories.Commons
 {
@@ -13,7 +15,7 @@ namespace MarkNet.Infrastructure.Repositories.Commons
             _repositories = new Dictionary<string, IRepository>();
         }
 
-        protected void RegisterRepository(Type type, IRepository repository) 
+        protected void RegisterRepository(Type type, IRepository repository)
         {
             var typeName = type.FullName!;
             _repositories.Add(typeName, repository);
@@ -23,7 +25,7 @@ namespace MarkNet.Infrastructure.Repositories.Commons
         {
             var typeName = typeof(T).FullName!;
 
-            if (_repositories.TryGetValue(typeName, out var repository)) 
+            if (_repositories.TryGetValue(typeName, out var repository))
             {
                 return (T)repository;
             }

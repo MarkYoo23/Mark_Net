@@ -2,6 +2,7 @@
 using MarkNet.Core.Repositories.Commons;
 using MarkNet.Core.Repositories.Configs;
 using MarkNet.Core.Services.Cashings;
+using System.Threading.Tasks;
 
 namespace MarkNet.Core.Services.Configs
 {

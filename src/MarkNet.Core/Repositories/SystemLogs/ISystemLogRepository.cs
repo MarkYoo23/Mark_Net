@@ -1,5 +1,7 @@
 ﻿using MarkNet.Core.Models.SystemLogs;
 using MarkNet.Core.Repositories.Commons;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace MarkNet.Core.Repositories.SystemLogs
 {

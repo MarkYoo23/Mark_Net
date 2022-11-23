@@ -1,4 +1,6 @@
-﻿namespace MarkNet.Core.Utils
+﻿using System.Linq;
+
+namespace MarkNet.Core.Utils
 {
     public static class PropertyValuePatcher<TParent, TChild> where TParent : class where TChild : class
     {

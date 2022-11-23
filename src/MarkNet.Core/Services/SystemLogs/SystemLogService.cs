@@ -2,6 +2,9 @@
 using MarkNet.Core.Models.SystemLogs;
 using MarkNet.Core.Repositories.Commons;
 using MarkNet.Core.Repositories.SystemLogs;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace MarkNet.Core.Services.SystemLogs
 {

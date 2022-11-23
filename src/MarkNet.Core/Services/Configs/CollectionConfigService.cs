@@ -3,6 +3,9 @@ using MarkNet.Core.Models;
 using MarkNet.Core.Repositories.Commons;
 using MarkNet.Core.Repositories.Configs;
 using MarkNet.Core.Services.Cashings;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace MarkNet.Core.Services.Configs
 {

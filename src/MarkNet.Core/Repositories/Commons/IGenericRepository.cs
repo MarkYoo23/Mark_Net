@@ -1,4 +1,6 @@
 ﻿using MarkNet.Core.Entities.Commons;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace MarkNet.Core.Repositories.Commons
 {
