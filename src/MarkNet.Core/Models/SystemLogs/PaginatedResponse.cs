@@ -1,4 +1,6 @@
-﻿namespace MarkNet.Core.Models.SystemLogs
+﻿using System.Collections.Generic;
+
+namespace MarkNet.Core.Models.SystemLogs
 {
     public class PaginatedResponse<T>
     {

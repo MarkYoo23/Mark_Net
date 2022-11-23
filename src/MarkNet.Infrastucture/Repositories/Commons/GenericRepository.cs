@@ -1,6 +1,8 @@
 ﻿using MarkNet.Core.Entities.Commons;
 using MarkNet.Core.Repositories.Commons;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace MarkNet.Infrastructure.Repositories.Commons
 {
@@ -28,7 +30,7 @@ namespace MarkNet.Infrastructure.Repositories.Commons
             await _entities.AddAsync(entity);
         }
 
-        public async Task AddRangeAsync(IEnumerable<T> entities) 
+        public async Task AddRangeAsync(IEnumerable<T> entities)
         {
             await _entities.AddRangeAsync(entities);
         }

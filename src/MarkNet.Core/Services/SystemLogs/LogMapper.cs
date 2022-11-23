@@ -1,4 +1,5 @@
 ﻿using MarkNet.Core.Models.SystemLogs;
+using System.Collections.Generic;
 
 namespace MarkNet.Core.Services.SystemLogs
 {

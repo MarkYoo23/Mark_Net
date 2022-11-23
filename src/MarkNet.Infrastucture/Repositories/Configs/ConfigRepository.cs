@@ -1,6 +1,7 @@
 ﻿using MarkNet.Core.Entities.Configs;
 using MarkNet.Core.Repositories.Configs;
 using Microsoft.EntityFrameworkCore;
+using System.Threading.Tasks;
 
 namespace MarkNet.Infrastructure.Repositories.Configs
 {

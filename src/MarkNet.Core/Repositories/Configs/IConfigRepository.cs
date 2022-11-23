@@ -1,4 +1,5 @@
 ﻿using MarkNet.Core.Repositories.Commons;
+using System.Threading.Tasks;
 
 namespace MarkNet.Core.Repositories.Configs
 {

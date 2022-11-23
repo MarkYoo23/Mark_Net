@@ -1,6 +1,8 @@
 ﻿using MarkNet.Core.Entities.Commons;
 using MarkNet.Core.Models;
 using MarkNet.Core.Repositories.Commons;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace MarkNet.Core.Services.Commons
 {
@@ -29,7 +31,7 @@ namespace MarkNet.Core.Services.Commons
             return entity;
         }
 
-        public async Task<bool> AddAsync(TModel model) 
+        public async Task<bool> AddAsync(TModel model)
         {
             var entity = new TEntity();
             entity.CopyValues(model);
@@ -45,17 +47,17 @@ namespace MarkNet.Core.Services.Commons
         public async Task<bool> UpdateAsync(int id, TModel newModel)
         {
             var repository = _mergedRepository.GetRepository<IGenericRepository<TEntity>>();
-            
+
             var model = await repository.GetAsync(id);
             model.CopyValues(newModel);
-            
+
             repository.Update(model);
 
             var isSuccessSave = await _mergedRepository.SaveEntitiesAsync();
             return isSuccessSave;
         }
 
-        public async Task<bool> RemoveAsync(int id) 
+        public async Task<bool> RemoveAsync(int id)
         {
             var repository = _mergedRepository.GetRepository<IGenericRepository<TEntity>>();
             var model = await repository.GetAsync(id);

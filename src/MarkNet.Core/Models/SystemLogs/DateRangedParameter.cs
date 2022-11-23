@@ -1,4 +1,6 @@
-﻿namespace MarkNet.Core.Models.SystemLogs
+﻿using System;
+
+namespace MarkNet.Core.Models.SystemLogs
 {
     public class DateRangedParameter
     {

@@ -1,4 +1,6 @@
-﻿namespace MarkNet.Core.Utils
+﻿using System.Linq;
+
+namespace MarkNet.Core.Utils
 {
     public static class PropertyValueCopier<TParent, TChild> where TParent : class where TChild : class
     {
@@ -12,10 +14,12 @@
                     .Where(row => row.Name == parentProperty.Name)
                     .Where(row => row.PropertyType == parentProperty.PropertyType)
                     .FirstOrDefault();
+
                 if (childProperty == null)
                 {
                     continue;
                 }
+
                 var parentValue = parentProperty.GetValue(parent);
                 childProperty.SetValue(child, parentValue);
             }

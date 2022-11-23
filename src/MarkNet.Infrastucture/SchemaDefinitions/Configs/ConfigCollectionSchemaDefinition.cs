@@ -1,6 +1,7 @@
 ﻿using MarkNet.Core.Entities.Configs;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using System.Linq;
 
 namespace MarkNet.Infrastructure.SchemaDefinitions.Configs
 {
