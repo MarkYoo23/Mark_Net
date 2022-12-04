@@ -1,15 +1,11 @@
 ﻿using MarkNet.Core.Models;
-using System.Threading;
+using MarkNet.Core.Services.Commons;
 using System.Threading.Tasks;
 
 namespace MarkNet.Core.Services.Cashings
 {
-    public class CashManager<T> where T : PropertyModel<T>, new()
+    public class CashManager<T> : AsyncLockManager where T : PropertyModel<T>, new()
     {
-        private const int _millisecondsWriteTimeout = 1000;
-        private const int _millisecondsReadDelay = 1;
-
-        private readonly SemaphoreSlim _semaphoreSlim = new SemaphoreSlim(1);
         private T _model;
 
         public CashManager()
@@ -38,25 +34,12 @@ namespace MarkNet.Core.Services.Cashings
             return model.Clone();
         }
 
-        private async Task WaitCanReadAsync()
-        {
-            while (!IsReadable()) 
-            {
-                await Task.Delay(_millisecondsReadDelay);
-            }
-        }
-
-        private bool IsReadable()
-        {
-            return _semaphoreSlim.CurrentCount > 0;
-        }
-
         public async Task<bool> SetAsync(T model)
         {
             var newModel = new T();
             newModel.CopyValues(model);
 
-            if (!await _semaphoreSlim.WaitAsync(CashManager<T>._millisecondsWriteTimeout))
+            if (!await _semaphoreSlim.WaitAsync(_millisecondsWriteTimeout))
             {
                 return false;
             }
@@ -70,7 +53,7 @@ namespace MarkNet.Core.Services.Cashings
 
         public async Task<bool> PatchAsync(T model)
         {
-            if (!await _semaphoreSlim.WaitAsync(CashManager<T>._millisecondsWriteTimeout))
+            if (!await _semaphoreSlim.WaitAsync(_millisecondsWriteTimeout))
             {
                 return false;
             }

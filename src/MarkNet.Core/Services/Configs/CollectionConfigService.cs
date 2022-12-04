@@ -36,7 +36,7 @@ namespace MarkNet.Core.Services.Configs
                     return model;
                 });
 
-            _cashManager.Set(values);
+            await _cashManager.SetAsync(values);
         }
 
         public Task<IEnumerable<TModel>> GetAsync()
@@ -65,7 +65,7 @@ namespace MarkNet.Core.Services.Configs
             await repository.AddRangeAsync(entities);
             await _mergedRepository.SaveChangeAsync();
 
-            _cashManager.Set(values);
+            await _cashManager.SetAsync(values);
         }
     }
 }

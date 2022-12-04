@@ -1,37 +1,59 @@
 ﻿using MarkNet.Core.Models;
-using System;
+using MarkNet.Core.Services.Commons;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace MarkNet.Core.Services.Cashings
 {
-    public class CollectionCashManager<T> where T : PropertyModel<T>, new()
+    public class CollectionCashManager<T> : AsyncLockManager
+        where T : PropertyModel<T>, new()
     {
-        private object _locker = new object();
         private List<T> _models = new List<T>();
+
+        public CollectionCashManager()
+        {
+        }
+
+        public CollectionCashManager(IEnumerable<T> models)
+        {
+            _models = models.ToList();
+        }
 
         public IEnumerable<T> Get()
         {
-            lock (_locker)
-            {
-                return _models.Select(row => row.Clone()).ToArray();
-            }
+            return GetAsync().Result;
         }
 
-        public void Set(IEnumerable<T> collections)
+        public async Task<IEnumerable<T>> GetAsync()
         {
-            lock (_locker)
+            await WaitCanReadAsync();
+
+            var models = _models;
+            return models.Select(row => row.Clone()).ToArray();
+        }
+
+        public async Task<bool> SetAsync(IEnumerable<T> collections)
+        {
+            var models = new List<T>();
+
+            foreach (var collection in collections)
             {
-                _models.Clear();
-                foreach (var collection in collections)
-                {
-                    var model = new T();
-                    model.CopyValues(collection);
-                    _models.Add(model);
-                }
+                var model = new T();
+                model.CopyValues(collection);
+                models.Add(model);
             }
+
+            if (!await _semaphoreSlim.WaitAsync(_millisecondsWriteTimeout))
+            {
+                return false;
+            }
+
+            _models = models;
+
+            _semaphoreSlim.Release();
+
+            return true;
         }
     }
 }
